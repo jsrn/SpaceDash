@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -20,10 +19,11 @@ public class SpaceDash {
     JFrame gameWindow;
     JPanel gamePanel;
     BufferedImage frame;
-    int lastKeys = -1;
     Player player;
     LinkedList<Projectile> projectiles;
     LinkedList<Grunt> grunts;
+    
+    boolean[] depressedKeys = new boolean[255];
 
     public SpaceDash() {
         // Set up game window
@@ -69,7 +69,11 @@ public class SpaceDash {
         gameWindow.addKeyListener(new java.awt.event.KeyAdapter() {
 
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                lastKeys = evt.getKeyCode();
+                depressedKeys[evt.getKeyCode()] = true;
+            }
+            
+            public void keyReleased(java.awt.event.KeyEvent evt){
+                depressedKeys[evt.getKeyCode()] = false;
             }
         });
 
@@ -84,9 +88,10 @@ public class SpaceDash {
 
     private void updateGame() {
         // Handle keypresses
-        if (lastKeys != -1) {
-            handleKeypress(lastKeys);
-            lastKeys = -1;
+        for(int i = 0; i < depressedKeys.length; i++){
+            if(depressedKeys[i] == true){
+                handleKeypress(i);
+            }
         }
 
         // Progress projectiles
