@@ -3,14 +3,14 @@ package spacedash;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import mobiles.Player;
+import mobiles.Projectile;
 import sun.applet.Main;
 
 public class SpaceDash {
@@ -18,10 +18,10 @@ public class SpaceDash {
     JFrame gameWindow;
     JPanel gamePanel;
     BufferedImage frame;
-    int FRAMES_PER_SECOND = 25;
     int lastKeys = -1;
     
     Player player;
+    LinkedList<Projectile> projectiles;
 
     public SpaceDash() {
         // Set up game window
@@ -30,11 +30,12 @@ public class SpaceDash {
         
         // Set up mobiles
         player = new Player();
+        projectiles = new LinkedList();
 
         // Enter game loop
         while (true) {
             try {
-                Thread.sleep(1000 / FRAMES_PER_SECOND);
+                Thread.sleep(1000 / Constants.FRAMES_PER_SECOND);
                 updateGame();
                 displayGame();
             } catch (InterruptedException ex) {
@@ -72,9 +73,19 @@ public class SpaceDash {
     }
 
     private void updateGame() {
+        // Handle keypresses
         if(lastKeys != -1){
             handleKeypress(lastKeys);
             lastKeys = -1;
+        }
+        
+        // Progress projectiles
+        for (Iterator<Projectile> it = projectiles.iterator(); it.hasNext();) {
+            Projectile projectile = it.next();
+            int currentX = projectile.getX();
+            int currentY = projectile.getY();
+            int bearing = projectile.getBearing();
+        
         }
     }
     
@@ -89,11 +100,15 @@ public class SpaceDash {
                 break;
             case Constants.KEY_DOWN:
                 player.setY(player.getY() + player.getSpeed());
-                System.out.println(player.getY());
                 break;
             case Constants.KEY_UP:
                 player.setY(player.getY() - player.getSpeed());
-                System.out.println(player.getY());
+                break;
+            case Constants.KEY_SPACE:
+                Projectile p = new Projectile(0, 1, "projectile1.png");
+                p.setX(player.getX());
+                p.setY(player.getY());
+                projectiles.add(p);
                 break;
         }
     }
@@ -123,7 +138,10 @@ public class SpaceDash {
         // Do monsters
 
         // Do missiles
-
+        for (Iterator<Projectile> it = projectiles.iterator(); it.hasNext();) {
+            Projectile projectile = it.next();
+            g.drawImage(projectile.getGraphic(), projectile.getX(), projectile.getY(), null);
+        }
 
         // Paint frame to window
         gamePanel.getGraphics().drawImage(frame, 0, 0, null);
