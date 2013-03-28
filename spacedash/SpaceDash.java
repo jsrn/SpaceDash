@@ -21,7 +21,6 @@ public class SpaceDash {
     JPanel gamePanel;
     BufferedImage frame;
     int lastKeys = -1;
-    
     Player player;
     LinkedList<Projectile> projectiles;
     LinkedList<Grunt> grunts;
@@ -30,16 +29,16 @@ public class SpaceDash {
         // Set up game window
         setUpGameWindow();
         frame = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
-        
+
         // Set up mobiles
         player = new Player();
         projectiles = new LinkedList();
         grunts = new LinkedList();
-        
+
         Grunt g = new Grunt();
         g.setX(400);
         g.setY(20);
-        
+
         grunts.add(g);
 
         // Enter game loop
@@ -62,12 +61,13 @@ public class SpaceDash {
         gameWindow.setSize(800, 600);
         gameWindow.setLocationRelativeTo(null);
         gameWindow.setResizable(false);
-        
+
         // Set up panel
         gamePanel = new JPanel();
         gamePanel.setSize(800, 600);
-        
+
         gameWindow.addKeyListener(new java.awt.event.KeyAdapter() {
+
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 lastKeys = evt.getKeyCode();
             }
@@ -84,34 +84,34 @@ public class SpaceDash {
 
     private void updateGame() {
         // Handle keypresses
-        if(lastKeys != -1){
+        if (lastKeys != -1) {
             handleKeypress(lastKeys);
             lastKeys = -1;
         }
-        
+
         // Progress projectiles
         for (Iterator<Projectile> it = projectiles.iterator(); it.hasNext();) {
             Projectile projectile = it.next();
             int currentX = projectile.getX();
             int currentY = projectile.getY();
             int bearing = projectile.getBearing();
-            
-            
+
+
             float dirX = (float) Math.cos(Math.toRadians(bearing));
             float dirY = (float) Math.sin(Math.toRadians(bearing));
-            
+
             float yDiff = dirY * Constants.PLAYER_MISSILE_SPEED;
             float xDiff = dirX * Constants.PLAYER_MISSILE_SPEED;
-            
-            projectile.setY(currentY - (int)yDiff);
-            projectile.setX(currentX + (int)xDiff);
-        
+
+            projectile.setY(currentY - (int) yDiff);
+            projectile.setX(currentX + (int) xDiff);
+
         }
     }
-    
-    private void handleKeypress(int keys){
+
+    private void handleKeypress(int keys) {
         //System.out.println("Key pressed: " + keys);
-        switch(keys){
+        switch (keys) {
             case Constants.KEY_RIGHT:
                 player.setX(player.getX() + player.getSpeed());
                 break;
@@ -125,10 +125,7 @@ public class SpaceDash {
                 player.setY(player.getY() - player.getSpeed());
                 break;
             case Constants.KEY_SPACE:
-                Projectile p = new Projectile(90, 1, "projectile1.png");
-                p.setX(player.getX());
-                p.setY(player.getY());
-                projectiles.add(p);
+                playerShoots();
                 break;
         }
     }
@@ -142,9 +139,15 @@ public class SpaceDash {
         g.fillRect(0, 0, 800, 600);
 
         // Do stars
-        g.setColor(Color.white);
+        g.setColor(Color.gray);
         int x, y;
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 25; i++) {
+            x = randX();
+            y = randY();
+            g.drawLine(x, y, x, y + 15);
+        }
+        g.setColor(Color.white);
+        for (int i = 0; i < 25; i++) {
             x = randX();
             y = randY();
             g.drawLine(x, y, x, y + 15);
@@ -169,6 +172,13 @@ public class SpaceDash {
 
         // Paint frame to window
         gamePanel.getGraphics().drawImage(frame, 0, 0, null);
+    }
+
+    private void playerShoots() {
+        Projectile p = new Projectile(90, 1, "projectile1.png");
+        p.setX(player.getX());
+        p.setY(player.getY());
+        projectiles.add(p);
     }
 
     private int randX() {
