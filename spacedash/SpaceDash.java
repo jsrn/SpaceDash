@@ -22,7 +22,6 @@ public class SpaceDash {
     Player player;
     LinkedList<Projectile> projectiles;
     LinkedList<Grunt> grunts;
-    
     boolean[] depressedKeys = new boolean[255];
 
     public SpaceDash() {
@@ -71,8 +70,8 @@ public class SpaceDash {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 depressedKeys[evt.getKeyCode()] = true;
             }
-            
-            public void keyReleased(java.awt.event.KeyEvent evt){
+
+            public void keyReleased(java.awt.event.KeyEvent evt) {
                 depressedKeys[evt.getKeyCode()] = false;
             }
         });
@@ -88,8 +87,8 @@ public class SpaceDash {
 
     private void updateGame() {
         // Handle keypresses
-        for(int i = 0; i < depressedKeys.length; i++){
-            if(depressedKeys[i] == true){
+        for (int i = 0; i < depressedKeys.length; i++) {
+            if (depressedKeys[i] == true) {
                 handleKeypress(i);
             }
         }
@@ -180,10 +179,19 @@ public class SpaceDash {
     }
 
     private void playerShoots() {
-        Projectile p = new Projectile(90, 1, "projectile1.png");
-        p.setX(player.getX());
-        p.setY(player.getY());
-        projectiles.add(p);
+        long lastFired = player.getLastFiredTime();
+        double rateOfFire = player.getRateOfFire();
+        long now = System.currentTimeMillis();
+        
+        int timestep = 1000/Constants.FRAMES_PER_SECOND;
+
+        if (now - rateOfFire >= lastFired) {
+            Projectile p = new Projectile(90, 1, "projectile1.png");
+            p.setX(player.getX());
+            p.setY(player.getY());
+            projectiles.add(p);
+            player.setLastFiredTime(now);
+        }
     }
 
     private int randX() {
