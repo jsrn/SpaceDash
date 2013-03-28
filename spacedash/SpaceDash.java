@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -85,6 +86,16 @@ public class SpaceDash {
             int currentX = projectile.getX();
             int currentY = projectile.getY();
             int bearing = projectile.getBearing();
+            
+            
+            float dirX = (float) Math.cos(Math.toRadians(bearing));
+            float dirY = (float) Math.sin(Math.toRadians(bearing));
+            
+            float yDiff = dirY * Constants.PLAYER_MISSILE_SPEED;
+            float xDiff = dirX * Constants.PLAYER_MISSILE_SPEED;
+            
+            projectile.setY(currentY - (int)yDiff);
+            projectile.setX(currentX + (int)xDiff);
         
         }
     }
@@ -105,7 +116,7 @@ public class SpaceDash {
                 player.setY(player.getY() - player.getSpeed());
                 break;
             case Constants.KEY_SPACE:
-                Projectile p = new Projectile(0, 1, "projectile1.png");
+                Projectile p = new Projectile(270, 1, "projectile1.png");
                 p.setX(player.getX());
                 p.setY(player.getY());
                 projectiles.add(p);
