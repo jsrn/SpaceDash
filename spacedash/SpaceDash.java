@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import mobiles.Grunt;
 import mobiles.Player;
 import mobiles.Projectile;
 import sun.applet.Main;
@@ -23,6 +24,7 @@ public class SpaceDash {
     
     Player player;
     LinkedList<Projectile> projectiles;
+    LinkedList<Grunt> grunts;
 
     public SpaceDash() {
         // Set up game window
@@ -32,6 +34,13 @@ public class SpaceDash {
         // Set up mobiles
         player = new Player();
         projectiles = new LinkedList();
+        grunts = new LinkedList();
+        
+        Grunt g = new Grunt();
+        g.setX(400);
+        g.setY(20);
+        
+        grunts.add(g);
 
         // Enter game loop
         while (true) {
@@ -147,6 +156,10 @@ public class SpaceDash {
         // Do asteroids
 
         // Do monsters
+        for (Iterator<Grunt> it = grunts.iterator(); it.hasNext();) {
+            Grunt grunt = it.next();
+            g.drawImage(grunt.getGraphic(), grunt.getX(), grunt.getY(), null);
+        }
 
         // Do missiles
         for (Iterator<Projectile> it = projectiles.iterator(); it.hasNext();) {
