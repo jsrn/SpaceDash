@@ -1,6 +1,9 @@
 package spacedash;
 
 public class Constants {
+    // Game constants
+    public static final int FRAMES_PER_SECOND = 25;
+    public static final int PLAYER_MISSILE_SPEED = 5;
 
     // Keycodes
     // Util
