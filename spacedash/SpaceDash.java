@@ -55,7 +55,6 @@ public class SpaceDash {
     }
 
     private void updateGame() {
-        System.out.println("Updating game");
     }
 
     private void displayGame() {
@@ -76,6 +75,7 @@ public class SpaceDash {
         }
         
         // Do player
+        g.drawImage(frame, 500, 500, 100, 100, null);
         
         // Do asteroids
         
