@@ -116,7 +116,7 @@ public class SpaceDash {
                 player.setY(player.getY() - player.getSpeed());
                 break;
             case Constants.KEY_SPACE:
-                Projectile p = new Projectile(270, 1, "projectile1.png");
+                Projectile p = new Projectile(90, 1, "projectile1.png");
                 p.setX(player.getX());
                 p.setY(player.getY());
                 projectiles.add(p);
