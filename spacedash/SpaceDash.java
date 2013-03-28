@@ -79,7 +79,7 @@ public class SpaceDash {
     }
     
     private void handleKeypress(int keys){
-        System.out.println("Key pressed: " + keys);
+        //System.out.println("Key pressed: " + keys);
         switch(keys){
             case Constants.KEY_RIGHT:
                 player.setX(player.getX() + player.getSpeed());
@@ -89,9 +89,11 @@ public class SpaceDash {
                 break;
             case Constants.KEY_DOWN:
                 player.setY(player.getY() + player.getSpeed());
+                System.out.println(player.getY());
                 break;
             case Constants.KEY_UP:
                 player.setY(player.getY() - player.getSpeed());
+                System.out.println(player.getY());
                 break;
         }
     }

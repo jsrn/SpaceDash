@@ -23,11 +23,11 @@ public class Mobile {
     }
     
     public int getX(){
-        return x - (w/2);
+        return x;
     }
     
     public int getY(){
-        return y - (h/2);
+        return y;
     }
     
     public void setSize(int w, int h){
@@ -36,11 +36,11 @@ public class Mobile {
     }
     
     public void setX(int newX){
-        x = newX + (w/2);
+        x = newX;
     }
     
     public void setY(int newY){
-        y = newY + (y/2);
+        y = newY;
     }
     
     public BufferedImage getGraphic(){
