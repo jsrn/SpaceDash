@@ -7,7 +7,7 @@ public class Player extends Mobile{
         
         setGraphic("player.png");
         setSize(50,50);
-        setSpeed(30);
+        setSpeed(25);
         setX(400);
         setY(500);
         setRateOfFire(1000);

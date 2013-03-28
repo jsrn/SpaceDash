@@ -3,7 +3,8 @@ package spacedash;
 public class Constants {
     // Game constants
     public static final int FRAMES_PER_SECOND = 25;
-    public static final int PLAYER_MISSILE_SPEED = 10;
+    public static final int PLAYER_MISSILE_SPEED = 30;
+    public static final double VERTICAL_SPEED_MODIFIER = 0.7;
 
     // Keycodes
     // Util

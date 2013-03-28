@@ -123,10 +123,10 @@ public class SpaceDash {
                 player.setX(player.getX() - player.getSpeed());
                 break;
             case Constants.KEY_DOWN:
-                player.setY(player.getY() + player.getSpeed());
+                player.setY(player.getY() + (int)(Constants.VERTICAL_SPEED_MODIFIER * player.getSpeed()));
                 break;
             case Constants.KEY_UP:
-                player.setY(player.getY() - player.getSpeed());
+                player.setY(player.getY() - (int)(Constants.VERTICAL_SPEED_MODIFIER * player.getSpeed()));
                 break;
             case Constants.KEY_SPACE:
                 playerShoots();
@@ -183,8 +183,6 @@ public class SpaceDash {
         double rateOfFire = player.getRateOfFire();
         long now = System.currentTimeMillis();
         
-        int timestep = 1000/Constants.FRAMES_PER_SECOND;
-
         if (now - rateOfFire >= lastFired) {
             Projectile p = new Projectile(90, 1, "projectile1.png");
             p.setX(player.getX());
