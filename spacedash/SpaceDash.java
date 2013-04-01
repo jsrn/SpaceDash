@@ -92,6 +92,14 @@ public class SpaceDash {
                 handleKeypress(i);
             }
         }
+        
+        // Add grunts
+        if(Math.random() <= 0.01){
+            Grunt g = new Grunt();
+            g.setY(0);
+            g.setX((int)(Math.random()*800));
+            grunts.add(g);
+        }
 
         // Move grunts
         for (Iterator<Grunt> it1 = grunts.iterator(); it1.hasNext();) {
