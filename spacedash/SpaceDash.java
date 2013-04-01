@@ -228,7 +228,7 @@ public class SpaceDash {
         
         if (now - rateOfFire >= lastFired) {
             Projectile p = new Projectile(90, 1, "projectile1.png");
-            p.setX(player.getX());
+            p.setX(player.getX() + 20);
             p.setY(player.getY());
             projectiles.add(p);
             player.setLastFiredTime(now);
