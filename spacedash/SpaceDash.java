@@ -92,6 +92,8 @@ public class SpaceDash {
                 handleKeypress(i);
             }
         }
+        
+        LinkedList<Grunt> deadGrunts = new LinkedList();
 
         // Progress projectiles
         for (Iterator<Projectile> it = projectiles.iterator(); it.hasNext();) {
@@ -109,8 +111,21 @@ public class SpaceDash {
 
             projectile.setY(currentY - (int) yDiff);
             projectile.setX(currentX + (int) xDiff);
-
+            
+            // Detect collision
+            for (Iterator<Grunt> it1 = grunts.iterator(); it1.hasNext();) {
+                Grunt grunt = it1.next();
+                if(grunt.checkCollision(projectile.getX(), projectile.getY())){
+                    deadGrunts.add(grunt);
+                }
+            }
         }
+        
+        // Get rid of dead grunts
+        for (Iterator<Grunt> it1 = deadGrunts.iterator(); it1.hasNext();) {
+                Grunt deadGrunt = it1.next();
+                grunts.remove(deadGrunt);
+            }
     }
 
     private void handleKeypress(int keys) {
