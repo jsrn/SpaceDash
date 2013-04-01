@@ -56,6 +56,20 @@ public class Mobile {
         this.w = w;
         this.h = h;
     }
+    
+    public boolean checkCollision(int missileX, int missileY){
+        int lowX = x;
+        int lowY = y;
+        int highX = x + w;
+        int highY = y + h;
+        
+        boolean withinX = missileX > lowX && missileX < highX;
+        boolean withinY = missileY > lowY && missileY < highY;
+        if(withinX && withinY ){
+            return true;
+        }
+        return false;
+    }
 
     public void setX(int newX) {
         x = newX;
