@@ -10,7 +10,7 @@ public class Player extends Mobile{
         setSpeed(25);
         setX(400);
         setY(500);
-        setRateOfFire(1000);
+        setRateOfFire(500);
         
     }
     
