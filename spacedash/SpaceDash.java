@@ -15,7 +15,7 @@ import mobiles.Projectile;
 import sun.applet.Main;
 
 public class SpaceDash {
-
+    
     JFrame gameWindow;
     JPanel gamePanel;
     BufferedImage frame;
@@ -23,7 +23,7 @@ public class SpaceDash {
     LinkedList<Projectile> projectiles;
     LinkedList<Grunt> grunts;
     boolean[] depressedKeys = new boolean[255];
-
+    
     public SpaceDash() {
         // Set up game window
         setUpGameWindow();
@@ -33,11 +33,11 @@ public class SpaceDash {
         player = new Player();
         projectiles = new LinkedList();
         grunts = new LinkedList();
-
+        
         Grunt g = new Grunt();
         g.setX(400);
         g.setY(20);
-
+        
         grunts.add(g);
 
         // Enter game loop
@@ -51,7 +51,7 @@ public class SpaceDash {
             }
         }
     }
-
+    
     private void setUpGameWindow() {
 
         // Set up JFrame
@@ -64,27 +64,27 @@ public class SpaceDash {
         // Set up panel
         gamePanel = new JPanel();
         gamePanel.setSize(800, 600);
-
+        
         gameWindow.addKeyListener(new java.awt.event.KeyAdapter() {
-
+            
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 depressedKeys[evt.getKeyCode()] = true;
             }
-
+            
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 depressedKeys[evt.getKeyCode()] = false;
             }
         });
-
+        
         gameWindow.add(gamePanel);
         gameWindow.setVisible(true);
-
+        
     }
-
+    
     public static void main(String[] args) {
         new SpaceDash();
     }
-
+    
     private void updateGame() {
         // Handle keypresses
         for (int i = 0; i < depressedKeys.length; i++) {
@@ -92,42 +92,70 @@ public class SpaceDash {
                 handleKeypress(i);
             }
         }
+
+        // Move grunts
+        for (Iterator<Grunt> it1 = grunts.iterator(); it1.hasNext();) {
+            Grunt grunt = it1.next();
+            int gruntX = grunt.getX();
+            int gruntY = grunt.getY();
+            
+            grunt.setY(gruntY + 1);
+            
+            if(gruntX < player.getX()){
+                grunt.setX(gruntX + 1);
+            } else if(gruntX > player.getX()){
+                grunt.setX(gruntX - 1);
+            }
+      
+        }
         
         LinkedList<Grunt> deadGrunts = new LinkedList();
-
+        LinkedList<Projectile> deadBullets = new LinkedList();
         // Progress projectiles
         for (Iterator<Projectile> it = projectiles.iterator(); it.hasNext();) {
             Projectile projectile = it.next();
             int currentX = projectile.getX();
             int currentY = projectile.getY();
             int bearing = projectile.getBearing();
-
-
+            
+            
             float dirX = (float) Math.cos(Math.toRadians(bearing));
             float dirY = (float) Math.sin(Math.toRadians(bearing));
-
+            
             float yDiff = dirY * Constants.PLAYER_MISSILE_SPEED;
             float xDiff = dirX * Constants.PLAYER_MISSILE_SPEED;
-
+            
             projectile.setY(currentY - (int) yDiff);
             projectile.setX(currentX + (int) xDiff);
-            
+
             // Detect collision
             for (Iterator<Grunt> it1 = grunts.iterator(); it1.hasNext();) {
                 Grunt grunt = it1.next();
-                if(grunt.checkCollision(projectile.getX(), projectile.getY())){
+                if (grunt.checkCollision(projectile.getX(), projectile.getY())) {
                     deadGrunts.add(grunt);
+                    deadBullets.add(projectile);
                 }
             }
+            
+            // Detect gone-ness
+            if(currentX < 0 || currentX > 800 || currentY < 0 || currentY > 800){
+                deadBullets.add(projectile);
+            }
         }
-        
+
         // Get rid of dead grunts
         for (Iterator<Grunt> it1 = deadGrunts.iterator(); it1.hasNext();) {
-                Grunt deadGrunt = it1.next();
-                grunts.remove(deadGrunt);
-            }
+            Grunt deadGrunt = it1.next();
+            grunts.remove(deadGrunt);
+        }
+        
+        // Get rid of dead bullets
+        for (Iterator<Projectile> it1 = deadBullets.iterator(); it1.hasNext();) {
+            Projectile deadBullet = it1.next();
+            projectiles.remove(deadBullet);
+        }
     }
-
+    
     private void handleKeypress(int keys) {
         //System.out.println("Key pressed: " + keys);
         switch (keys) {
@@ -138,17 +166,17 @@ public class SpaceDash {
                 player.setX(player.getX() - player.getSpeed());
                 break;
             case Constants.KEY_DOWN:
-                player.setY(player.getY() + (int)(Constants.VERTICAL_SPEED_MODIFIER * player.getSpeed()));
+                player.setY(player.getY() + (int) (Constants.VERTICAL_SPEED_MODIFIER * player.getSpeed()));
                 break;
             case Constants.KEY_UP:
-                player.setY(player.getY() - (int)(Constants.VERTICAL_SPEED_MODIFIER * player.getSpeed()));
+                player.setY(player.getY() - (int) (Constants.VERTICAL_SPEED_MODIFIER * player.getSpeed()));
                 break;
             case Constants.KEY_SPACE:
                 playerShoots();
                 break;
         }
     }
-
+    
     private void displayGame() {
         // Get frame's graphics object
         Graphics g = frame.getGraphics();
@@ -192,7 +220,7 @@ public class SpaceDash {
         // Paint frame to window
         gamePanel.getGraphics().drawImage(frame, 0, 0, null);
     }
-
+    
     private void playerShoots() {
         long lastFired = player.getLastFiredTime();
         double rateOfFire = player.getRateOfFire();
@@ -206,11 +234,11 @@ public class SpaceDash {
             player.setLastFiredTime(now);
         }
     }
-
+    
     private int randX() {
         return (int) (Math.random() * 800);
     }
-
+    
     private int randY() {
         return (int) (Math.random() * 600);
     }
